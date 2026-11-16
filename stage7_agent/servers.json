@@ -1,0 +1,6 @@
+{
+  "servers": {
+    "weather": { "command": "python", "args": ["weather_server.py"] },
+    "notes":   { "command": "python", "args": ["notes_server.py"] }
+  }
+}
