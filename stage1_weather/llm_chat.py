@@ -18,7 +18,10 @@ import asyncio, json, os, sys
 from pathlib import Path
 
 from mcp import Client, StdioServerParameters
+from dotenv import load_dotenv
 from openai import AsyncOpenAI
+
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")  # reads OPENAI_API_KEY etc. from the repo-root .env
 
 SERVER = Path(__file__).with_name("my_server.py")
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5.4-mini")
@@ -38,7 +41,7 @@ def to_openai_tool(tool) -> dict:
 
 async def main():
     if not os.environ.get("OPENAI_API_KEY"):
-        sys.exit("Set OPENAI_API_KEY first. See 'Set up your OpenAI key' in the main README.")
+        sys.exit("No OPENAI_API_KEY found. Add it to the .env file at the repo root. See 'Set up your OpenAI key' in the main README.")
     question = " ".join(sys.argv[1:]) or "What's the weather like in Tokyo right now?"
     llm = AsyncOpenAI()  # reads OPENAI_API_KEY (and OPENAI_BASE_URL, if you set one)
 

@@ -17,9 +17,13 @@ Usage:
     python agent.py --demo    run a short scripted chat, auto-approving tools
 """
 import asyncio, json, os, sys
+from pathlib import Path
 
+from dotenv import load_dotenv
 from openai import AsyncOpenAI
 from host import Host, one_line
+
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")  # reads OPENAI_API_KEY etc. from the repo-root .env
 
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5.4-mini")
 SYSTEM = (
@@ -81,7 +85,7 @@ async def auto_approve(label: str) -> bool:
 
 async def main():
     if not os.environ.get("OPENAI_API_KEY"):
-        sys.exit("Set OPENAI_API_KEY first. See 'Set up your OpenAI key' in the main README.")
+        sys.exit("No OPENAI_API_KEY found. Add it to the .env file at the repo root. See 'Set up your OpenAI key' in the main README.")
     demo = "--demo" in sys.argv
     host = Host()
     await host.start()

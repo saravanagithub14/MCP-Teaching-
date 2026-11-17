@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Runs every stage. Part 1 of each stage (plain MCP) always runs.
-# Part 2 (the OpenAI model) runs only when OPENAI_API_KEY is set.
+# Part 2 (the OpenAI model) runs only when OPENAI_API_KEY is in .env or the environment.
 set -e
 cd "$(dirname "$0")"
 PY=$(command -v python3 || command -v python)  # python3 on macOS/Linux, python on Windows
 run() { echo; echo "################ $1/$2 ################"; (cd "$1" && "$PY" "${@:2}"); }
-llm() { if [ -n "$OPENAI_API_KEY" ]; then run "$@"; else echo; echo "(skipping $1/$2: set OPENAI_API_KEY to run it)"; fi; }
+llm() { if [ -n "$OPENAI_API_KEY" ] || grep -qs "^OPENAI_API_KEY=." .env; then run "$@"; else echo; echo "(skipping $1/$2: add OPENAI_API_KEY to .env to run it)"; fi; }
 
 run stage1_weather test_client.py;            llm stage1_weather llm_chat.py
 run stage2_wire raw_wire_client.py;           llm stage2_wire llm_to_wire.py

@@ -10,7 +10,10 @@ import asyncio, json, os, socket, subprocess, sys, time
 from pathlib import Path
 
 from mcp import Client
+from dotenv import load_dotenv
 from openai import AsyncOpenAI
+
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")  # reads OPENAI_API_KEY etc. from the repo-root .env
 
 PORT = 8766
 URL = f"http://127.0.0.1:{PORT}/mcp"
@@ -51,7 +54,7 @@ async def ask(llm, mcp, tools, question: str, max_rounds: int = 5) -> str:
 
 async def main():
     if not os.environ.get("OPENAI_API_KEY"):
-        sys.exit("Set OPENAI_API_KEY first. See 'Set up your OpenAI key' in the main README.")
+        sys.exit("No OPENAI_API_KEY found. Add it to the .env file at the repo root. See 'Set up your OpenAI key' in the main README.")
     server = subprocess.Popen(
         [sys.executable, str(Path(__file__).with_name("http_server.py")), str(PORT)],
         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

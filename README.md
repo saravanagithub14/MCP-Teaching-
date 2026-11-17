@@ -58,28 +58,27 @@ pip install -r requirements.txt
 1. Create an API key on the OpenAI platform website (the "API keys" page of
    your account). API usage is billed per request. The demos here are small,
    but set a monthly spending limit in your account to be safe.
-2. Put the key in an environment variable called `OPENAI_API_KEY`:
+2. Create a file called `.env` in the repo's top folder (next to this README)
+   with one line:
 
    ```
-   # Windows PowerShell (this window only)
-   $env:OPENAI_API_KEY = "sk-..."
-
-   # Windows, saved for every new window
-   setx OPENAI_API_KEY "sk-..."
-
-   # macOS / Linux / Git Bash
-   export OPENAI_API_KEY="sk-..."
+   OPENAI_API_KEY=sk-...
    ```
+
+   No spaces around the `=` and no quotes. Every script loads this file on
+   start (using `python-dotenv`). A key already set in your shell wins over
+   the file, so `$env:OPENAI_API_KEY = "sk-..."` (PowerShell) or
+   `export OPENAI_API_KEY="sk-..."` (macOS / Linux) also works.
 
 3. Test it: `cd stage1_weather` then `python llm_chat.py`.
 
-**Never paste your key into a code file** or commit it to git. The scripts read
-it from the environment, so it never needs to be in the code.
+**Never paste your key into a code file** or commit it to git. `.env` is
+listed in `.gitignore`, so git won't pick it up.
 
 ### Choosing a model
 
 The scripts use `gpt-5.4-mini` by default, a small, cheap model that supports
-tool calling. To use another one, set `OPENAI_MODEL`:
+tool calling. To use another one, set `OPENAI_MODEL` (in `.env` or your shell):
 
 ```
 $env:OPENAI_MODEL = "gpt-5.4"        # PowerShell

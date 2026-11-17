@@ -10,12 +10,15 @@ from it, so you can see the translation is just copying two fields:
 import json, os, subprocess, sys
 from pathlib import Path
 
+from dotenv import load_dotenv
 from openai import OpenAI
+
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")  # reads OPENAI_API_KEY etc. from the repo-root .env
 
 SERVER = Path(__file__).with_name("my_server.py")
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5.4-mini")
 if not os.environ.get("OPENAI_API_KEY"):
-    sys.exit("Set OPENAI_API_KEY first. See 'Set up your OpenAI key' in the main README.")
+    sys.exit("No OPENAI_API_KEY found. Add it to the .env file at the repo root. See 'Set up your OpenAI key' in the main README.")
 
 proc = subprocess.Popen([sys.executable, str(SERVER)],
                         stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True, bufsize=1)
